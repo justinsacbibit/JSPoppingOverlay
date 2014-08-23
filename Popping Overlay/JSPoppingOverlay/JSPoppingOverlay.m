@@ -65,7 +65,7 @@
 
 - (void)showImage:(UIImage *)image onView:(UIView *)view message:(NSString *)message
 {
-    if (!view || !((image || self.customImage) || message))
+    if (!view || !(image || message))
     {
         NSAssert(view, @"%@: %s: Attempt to be shown without a view", [self class], __PRETTY_FUNCTION__);
         NSAssert(image || message, @"%@: %s: Attempt to be shown without content", [self class], __PRETTY_FUNCTION__);
@@ -115,14 +115,19 @@
     }];
 }
 
+- (void)showCustomImageOnView:(UIView *)view message:(NSString *)message
+{
+    [self showImage:self.customImage onView:view message:message];
+}
+
 - (void)showSuccessOnView:(UIView *)view message:(NSString *)message
 {
-    [self showImage:[self successImage] onView:view message:message];
+    [self showImage:self.successImage onView:view message:message];
 }
 
 - (void)showErrorOnView:(UIView *)view message:(NSString *)message
 {
-    [self showImage:[self errorImage] onView:view message:message];
+    [self showImage:self.errorImage onView:view message:message];
 }
 
 #pragma mark - Properties
