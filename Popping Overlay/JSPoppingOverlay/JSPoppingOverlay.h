@@ -94,4 +94,9 @@
  */
 - (void)showErrorOnView:(UIView *)view message:(NSString *)message;
 
+/**
+ *  Hide the overlay immediately.
+ */
+- (void)hideImmediately;
+
 @end

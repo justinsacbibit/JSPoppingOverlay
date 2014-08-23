@@ -130,6 +130,11 @@
     [self showImage:self.errorImage onView:view message:message];
 }
 
+- (void)hideImmediately
+{
+    [self removeFromSuperview];
+}
+
 #pragma mark - Properties
 
 - (UIImage *)successImage
