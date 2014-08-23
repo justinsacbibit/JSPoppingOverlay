@@ -15,6 +15,8 @@
 @property (nonatomic, strong) UIImageView *poppingImageView;
 @property (nonatomic, strong) UILabel *textLabel;
 
+@property (nonatomic) BOOL isPopping;
+
 @end
 
 @implementation JSPoppingOverlay
@@ -28,9 +30,19 @@
 {
     if (self = [super initWithFrame:frame])
     {
+        // default properties
+        _backgroundOverlayColor = [UIColor blackColor];
+        _backgroundOverlayAlpha = 0.75f;
+        _textColor = [UIColor whiteColor];
+        _font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];
+        _successImage = [UIImage imageNamed:@"success"];
+        _errorImage = [UIImage imageNamed:@"error"];
+        _animationDuration = 0.2;
+        _duration = 0.5;
+        
         _backgroundOverlayView = [[UIView alloc] init];
-        _backgroundOverlayView.backgroundColor = [UIColor blackColor];
-        _backgroundOverlayView.alpha = 0.75f;
+        _backgroundOverlayView.backgroundColor = _backgroundOverlayColor;
+        _backgroundOverlayView.alpha = _backgroundOverlayAlpha;
         [self addSubview:_backgroundOverlayView];
         
         _containerView = [[UIView alloc] init];
@@ -42,25 +54,22 @@
         [_containerView addSubview:_poppingImageView];
         
         _textLabel = [[UILabel alloc] init];
-        _textLabel.textColor = [UIColor whiteColor];
+        _textLabel.textColor = _textColor;
         _textLabel.textAlignment = NSTextAlignmentCenter;
         _textLabel.numberOfLines = 1;
-        _textLabel.text = @"YOLO";
-        _textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];
+        _textLabel.text = @"";
+        _textLabel.font = _font;
         [_containerView addSubview:_textLabel];
         
         self.layer.masksToBounds = YES;
         self.clipsToBounds = YES;
-        
-        _duration = 0.5;
-        _animationDuration = 0.2;
     }
     return self;
 }
 
 - (BOOL)isVisible
 {
-    return self.superview != nil;
+    return self.isPopping;
 }
 
 - (void)showImage:(UIImage *)image onView:(UIView *)view message:(NSString *)message
@@ -71,6 +80,13 @@
         NSAssert(image || message, @"%@: %s: Attempt to be shown without content", [self class], __PRETTY_FUNCTION__);
         return;
     }
+    
+    if (self.isPopping)
+    {
+        return;
+    }
+    
+    self.isPopping = YES;
     
     self.frame = view.bounds;
     
@@ -111,6 +127,7 @@
             self.textLabel.alpha = 0.0f;
         } completion:^(BOOL finished) {
             [self removeFromSuperview];
+            [self reset];
         }];
     }];
 }
@@ -135,26 +152,43 @@
     [self removeFromSuperview];
 }
 
-#pragma mark - Properties
-
-- (UIImage *)successImage
+- (void)reset
 {
-    if (_successImage)
-    {
-        return _successImage;
-    }
-    
-    return [UIImage imageNamed:@"success"];
+    self.backgroundOverlayView.alpha = self.backgroundOverlayAlpha;
+    self.poppingImageView.alpha = 1.0f;
+    self.poppingImageView.transform = CGAffineTransformIdentity;
+    self.textLabel.alpha = 1.0f;
+    self.isPopping = NO;
 }
 
-- (UIImage *)errorImage
+#pragma mark - Setters
+
+- (void)setBackgroundOverlayColor:(UIColor *)backgroundOverlayColor
 {
-    if (_errorImage)
-    {
-        return _errorImage;
-    }
+    _backgroundOverlayColor = backgroundOverlayColor;
     
-    return [UIImage imageNamed:@"error"];
+    self.backgroundOverlayView.backgroundColor = backgroundOverlayColor;
+}
+
+- (void)setBackgroundOverlayAlpha:(CGFloat)backgroundOverlayAlpha
+{
+    _backgroundOverlayAlpha = backgroundOverlayAlpha;
+    
+    self.backgroundOverlayView.alpha = backgroundOverlayAlpha;
+}
+
+- (void)setTextColor:(UIColor *)textColor
+{
+    _textColor = textColor;
+    
+    self.textLabel.textColor = textColor;
+}
+
+- (void)setFont:(UIFont *)font
+{
+    _font = font;
+    
+    self.textLabel.font = font;
 }
 
 @end

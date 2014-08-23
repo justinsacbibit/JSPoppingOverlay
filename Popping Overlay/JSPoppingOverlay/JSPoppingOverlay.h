@@ -18,6 +18,13 @@
 @property (nonatomic, strong) UIColor *backgroundOverlayColor;
 
 /**
+ *  The overlay's alpha.
+ *  @discussion default is 0.75f
+ */
+@property (nonatomic) CGFloat backgroundOverlayAlpha;
+
+
+/**
  *  The color of the message text.
  *  @discussion default is [UIColor whiteColor]
  */
@@ -31,13 +38,13 @@
 
 /**
  *  The default success image of the overlay.
- *  @discussion default is currently nil, searches for image named "success"
+ *  @discussion default currently searches for an image named "success"
  */
 @property (nonatomic, strong) UIImage *successImage;
 
 /**
  *  The default error image of the overlay.
- *  @discussion default is currently nil, searches for image named "error"
+ *  @discussion default currently searches for an image named "error"
  */
 @property (nonatomic, strong) UIImage *errorImage;
 
