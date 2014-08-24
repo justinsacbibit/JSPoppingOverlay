@@ -54,3 +54,8 @@ There are multiple properties you can access to customize the appearance of the 
 @property (nonatomic) NSTimeInterval animationDuration;
 @property (nonatomic) NSTimeInterval duration;
 ```
+
+Issues/Contributions
+-
+
+Feel free to submit an issue or a pull request!
